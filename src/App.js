@@ -9,11 +9,15 @@ const initialItems = [
 
 
 export default function App() {
+    const [items, setItems] = useState([]);
+    function hanldeAddItems(item){
+      setItems((items)=>[...items, item] );
+    }
   return (
     <div className="App">
       <Logo />
-      <Form />
-      <PackingList />
+      <Form onAddItems={hanldeAddItems} />
+      <PackingList items= {items} />
       <Stats />
     </div>
   );
@@ -23,7 +27,7 @@ function Logo() {
   return <h2>🐣Travel Buddy 🌴</h2>
 }
 
-function Form() {
+function Form({onAddItems}) {
   // this gets the input values on change
   const [description,setDescription] = useState('');
     // this gets the select values on change
@@ -39,6 +43,7 @@ function Form() {
     };
     const newItem = {description,select,packed:false,id:Date.now()};
     console.log(newItem);
+    onAddItems(newItem);
     setDescription('');
     setSelect(1);
   }
@@ -56,9 +61,9 @@ function Form() {
   </form>
 }
 
-function PackingList() {
+function PackingList({items}) {
   return <div className="list"><ul>
-    {initialItems.map(item => <Item key={item.id} item={item} />)}
+    {items.map(item => <Item key={item.id} item={item} />)}
   </ul></div>
 }
 function Item({ item }) {
