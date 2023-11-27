@@ -4,4 +4,4 @@ This is a travel app which allows user to sort data based on their needs
 
 https://ashishk70.github.io/travel-app/
 
---> reminder this project is not yet designed for small or medium devices
+--> reminder this project is not yet designed for small or medium devices and still in progress state as I'm still learning.
