@@ -9,17 +9,26 @@ import { useState } from "react";
 
 
 export default function App() {
+  // handle items count 
     const [items, setItems] = useState([]);
     function hanldeAddItems(item){
       setItems((items)=>[...items, item] );
     }
+
+    //  delete items
+    function handleDeleteItems(id){
+      console.log(id)
+      setItems((items=>items.filter(item=>item.id !==id)));
+    }
+
+
   return (
     <div className="App">
       <Logo />
       <Form onAddItems={hanldeAddItems} />
-      <PackingList items= {items} />
+      <PackingList items= {items}  onDeleteItems={handleDeleteItems}/>
       <Stats />
-      
+
     </div>
   );
 }
@@ -36,14 +45,14 @@ function Form({onAddItems}) {
 
   function handleSubmit(e){
     e.preventDefault();
-    console.log(e)
+    // console.log(e)
     // this newItems gets the value of select and input items so we can add them to our packing list
     if(!description) {
       alert("Please enter item...");
       return;
     };
     const newItem = {description,select,packed:false,id:Date.now()};
-    console.log(newItem);
+    // console.log(newItem);
     onAddItems(newItem);
     setDescription('');
     setSelect(1);
@@ -59,18 +68,18 @@ function Form({onAddItems}) {
   </form>
 }
 
-function PackingList({items}) {
+function PackingList({items,onDeleteItems}) {
   return <div className="list"><ul>
-    {items.map(item => <Item key={item.id} item={item} />)}
+    {items.map(item => <Item key={item.id} item={item}  onDeleteItems={onDeleteItems}/>)}
   </ul></div>
 }
-function Item({ item }) {
+function Item({ item, onDeleteItems }) {
   return <li>
     {/* using ternary operater to set the class of packed items */}
     <span style={item.packed ? {textDecoration:'line-through'}:{}}>
     {item.select} {item.description}
     </span>
-    <button>❌</button>
+    <button onClick={()=>onDeleteItems(item.id)}>❌</button>
   </li>
 }
 
