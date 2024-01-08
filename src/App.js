@@ -14,19 +14,21 @@ export default function App() {
     function hanldeAddItems(item){
       setItems((items)=>[...items, item] );
     }
-
     //  delete items
     function handleDeleteItems(id){
       console.log(id)
       setItems((items=>items.filter(item=>item.id !==id)));
     }
-
+    // update checkbox values
+    function handleToggleItems(id){
+      setItems(items=>items.map(item=>item.id ===id ? {...item, packed : !item.packed} :item))
+    }
 
   return (
     <div className="App">
       <Logo />
       <Form onAddItems={hanldeAddItems} />
-      <PackingList items= {items}  onDeleteItems={handleDeleteItems}/>
+      <PackingList items= {items}  onDeleteItems={handleDeleteItems} onToggleItems={handleToggleItems}/>
       <Stats />
 
     </div>
@@ -59,7 +61,7 @@ function Form({onAddItems}) {
     setSelect(1);
   }
   return <form className="add-form" onSubmit={handleSubmit}>
-    <h3>What do we need for the Trip?🤔</h3>
+    <h3>What do we need 🤔 </h3>
     <select value={select} onChange={(e)=>setSelect(Number(e.target.value))}>
       {/* using array.from method to dynamically setting 20 options instead of manually */}
       {Array.from({length:20},(_, i)=>i+1).map(num=><option value={num} key={num}>{num}</option>)}
@@ -69,14 +71,15 @@ function Form({onAddItems}) {
   </form>
 }
 
-function PackingList({items,onDeleteItems}) {
+function PackingList({items,onDeleteItems,onToggleItems}) {
   return <div className="list"><ul>
-    {items.map(item => <Item key={item.id} item={item}  onDeleteItems={onDeleteItems}/>)}
+    {items.map(item => <Item key={item.id} item={item}  onDeleteItems={onDeleteItems} onToggleItems={onToggleItems}/>)}
   </ul></div>
 }
-function Item({ item, onDeleteItems }) {
+function Item({ item, onDeleteItems,onToggleItems }) {
   return <li>
     {/* using ternary operater to set the class of packed items */}
+    <input type="checkbox" value={item.packed} onChange={()=>{onToggleItems(item.id)}}/>
     <span style={item.packed ? {textDecoration:'line-through'}:{}}>
     {item.select} {item.description}
     </span>
